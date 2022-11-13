@@ -1,7 +1,7 @@
 // @ts-nocheck
 import express from 'express'
 export const app = express()
-const port = 3003
+const port = 5000
 const jsonBody = express.json()
 app.use(jsonBody)
 
@@ -85,6 +85,12 @@ app.delete('/testing/all-data', (req, res) => {
     res.sendStatus(204);
 
 })
+
+app.get('/', (req, res) => {
+    res.status(200).send('Hello');
+    return;
+})
+
 //GET all
 app.get('/videos', (req, res) => {
     res.status(200).json(db.videos);
