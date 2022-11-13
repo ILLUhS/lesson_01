@@ -138,7 +138,7 @@ app.put('/videos/:id', (req, res) => {
         errorFlag = true;
     }
     foundVideoUpdate.author = String(authorReqUpdate);
-    if(canBeDownloadedUpdate){
+    if(canBeDownloadedUpdate !== undefined){
         if(typeof canBeDownloadedUpdate !== "boolean"){
             errors.errorsMessages.push({
                 message: "bad field",
@@ -161,8 +161,9 @@ app.put('/videos/:id', (req, res) => {
         }
         foundVideoUpdate.minAgeRestriction = minAgeRestrictionUpdate;
     }
+    const publicationDateUpdateCheck = new Date(Date.parse(publicationDateUpdate)).toISOString();
     if(publicationDateUpdate){
-        if(typeof publicationDateUpdate !== "string"){
+        if(typeof publicationDateUpdate !== "string" || publicationDateUpdate !== publicationDateUpdateCheck){
             errors.errorsMessages.push({
                 message: "bad field",
                 field: "canBeDownloaded"
