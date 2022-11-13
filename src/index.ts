@@ -77,7 +77,7 @@ app.post('/videos', (req, res) => {
         }
     }
     if(errorFlag){
-        res.status(400).send(errors);
+        res.status(400).json(errors);
         return;
     }
     db.videos.push(newVideo);
@@ -190,7 +190,7 @@ app.put('/videos/:id', (req, res) => {
         }
     }
     if(errorFlag){
-        res.status(400).send(errors);
+        res.status(400).json(errors);
         return;
     }
     res.sendStatus(204);
@@ -202,6 +202,7 @@ app.delete('/videos/:id', (req, res) => {
         res.sendStatus(404);
         return;
     }
+    db.videos = db.videos.splice(db.videos.indexOf(foundVideoDelete), 1);
     res.sendStatus(204);
 })
 
