@@ -58,10 +58,14 @@ app.post('/videos', (req, res) => {
     }
     if(availableResolutionsReq){
         let resolutionFlag = true;
-        for(const resolutionReq of availableResolutionsReq)
+
+        for(const i of availableResolutionsReq)
+            resolutionFlag = resolutions.includes(i);
+
+        /*for(const resolutionReq of availableResolutionsReq)
             for(const resolutionRigth of resolutions)
                 if(resolutionReq !== resolutionRigth)
-                    resolutionFlag = false;
+                    resolutionFlag = false;*/
         if(resolutionFlag)
             newVideo.availableResolutions = availableResolutionsReq;
         else {
@@ -184,10 +188,14 @@ app.put('/videos/:id', (req, res) => {
     }
     if(availableResolutionsReqUpdate){
         let resolutionFlagUpdate = true;
-        for(const resolutionReq of availableResolutionsReqUpdate)
+
+        for(const i of availableResolutionsReq)
+            resolutionFlagUpdate = resolutions.includes(i);
+
+        /*for(const resolutionReq of availableResolutionsReqUpdate)
             for(const resolutionRigth of resolutions)
                 if(resolutionReq !== resolutionRigth)
-                    resolutionFlagUpdate = false;
+                    resolutionFlagUpdate = false;*/
         if(resolutionFlagUpdate){
             foundVideoUpdate.availableResolutions = availableResolutionsReqUpdate;
         }
