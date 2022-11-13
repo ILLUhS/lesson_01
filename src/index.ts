@@ -4,19 +4,20 @@ export const app = express()
 const port = 3003
 const jsonBody = express.json()
 app.use(jsonBody)
+
+type VideoType = {
+    id: number;
+    title: string;
+    author: string;
+    canBeDownloaded: boolean;
+    minAgeRestriction: number | null;
+    createdAt: string;
+    publicationDate: string;
+    availableResolutions: string[] | null;
+};
+
 const db = {
-    videos: [
-        {
-            id: 1,
-            title: 'first video',
-            author: 'Dane',
-            canBeDownloaded: true,
-            minAgeRestriction: 1,
-            createdAt: new Date().toISOString(),
-            publicationDate: new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).toISOString(),
-            availableResolutions: []
-        }
-    ]
+    videos: Array<VideoType>
 }
 //массив валидных разрешений
 const resolutions = [ 'P144', 'P240', 'P360', 'P480', 'P720', 'P1080', 'P1440', 'P2160' ];
