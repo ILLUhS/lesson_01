@@ -18,10 +18,16 @@ type VideoType = {
 type dbType = {
     videos: VideoType[];
 };
+type errorsMessagesType = {
+    message: string;
+    field: string;
+}
+type errorsType = {
+    errorsMessages: errorsMessagesType[];
+}
 const db: dbType = {
     videos: []
 };
-
 //массив валидных разрешений
 const resolutions = [ 'P144', 'P240', 'P360', 'P480', 'P720', 'P1080', 'P1440', 'P2160' ];
 //POST
@@ -29,25 +35,21 @@ app.post('/videos', (req, res) => {
     const titleReq = req.body.title;
     const authorReq = req.body.author;
     const availableResolutionsReq = req.body.availableResolutions;
+    const errors: errorsType = {errorsMessages: []};
+    let errorFlag = false;
     if(!titleReq || typeof titleReq !== "string" || titleReq.length > 40){
-        res.status(400).send({
-            "errorsMessages":
-                [{
-                    message: "bad title",
-                    field: "title"
-                }]
+        errors.errorsMessages.push({
+            message: "bad title",
+            field: "title"
         });
-        return;
+        errorFlag = true;
     }
     if(!authorReq || typeof authorReq !== "string" || authorReq.length > 20){
-        res.status(400).send({
-            "errorsMessages":
-                [{
-                    message: "bad author",
-                    field: "author"
-                }]
+        errors.errorsMessages.push({
+            message: "bad author",
+            field: "author"
         });
-        return;
+        errorFlag = true;
     }
     const newVideo = {
         id: Number(new Date()),
@@ -67,15 +69,16 @@ app.post('/videos', (req, res) => {
         if(resolutionFlag)
             newVideo.availableResolutions = availableResolutionsReq;
         else {
-            res.status(400).send({
-                "errorsMessages":
-                    [{
-                        message: "bad resolutions",
-                        field: "availableResolutions"
-                    }]
+            errors.errorsMessages.push({
+                message: "bad resolutions",
+                field: "availableResolutions"
             });
-            return;
+            errorFlag = true;
         }
+    }
+    if(errorFlag){
+        res.status(400).send(errors);
+        return;
     }
     db.videos.push(newVideo);
     res.status(201).json(newVideo);
@@ -120,38 +123,31 @@ app.put('/videos/:id', (req, res) => {
     const canBeDownloadedUpdate = req.body.canBeDownloaded;
     const minAgeRestrictionUpdate = req.body.minAgeRestriction;
     const publicationDateUpdate = req.body.publicationDate;
+    const errors: errorsType = {errorsMessages: []};
+    let errorFlag = false;
     if(!titleReqUpdate || typeof titleReqUpdate !== "string" || titleReqUpdate.length > 40){
-        res.status(400).send({
-            "errorsMessages":
-                [{
-                    message: "bad title",
-                    field: "title"
-                }]
+        errors.errorsMessages.push({
+            message: "bad title",
+            field: "title"
         });
-        return;
+        errorFlag = true;
     }
     foundVideoUpdate.title = String(titleReqUpdate);
     if(!authorReqUpdate || typeof authorReqUpdate !== "string" || authorReqUpdate.length > 20){
-        res.status(400).send({
-            "errorsMessages":
-                [{
-                    message: "bad author",
-                    field: "author"
-                }]
+        errors.errorsMessages.push({
+            message: "bad author",
+            field: "author"
         });
-        return;
+        errorFlag = true;
     }
     foundVideoUpdate.author = String(authorReqUpdate);
     if(canBeDownloadedUpdate){
         if(typeof canBeDownloadedUpdate !== "boolean"){
-            res.status(400).send({
-                "errorsMessages":
-                    [{
-                        message: "bad field",
-                        field: "canBeDownloaded"
-                    }]
+            errors.errorsMessages.push({
+                message: "bad field",
+                field: "canBeDownloaded"
             });
-            return;
+            errorFlag = true;
         }
         foundVideoUpdate.canBeDownloaded = canBeDownloadedUpdate;
     }
@@ -160,27 +156,21 @@ app.put('/videos/:id', (req, res) => {
     }
     else if(minAgeRestrictionUpdate){
         if(typeof minAgeRestrictionUpdate !== "number" || minAgeRestrictionUpdate < 1 || minAgeRestrictionUpdate > 18){
-            res.status(400).send({
-                "errorsMessages":
-                    [{
-                        message: "bad field",
-                        field: "minAgeRestriction"
-                    }]
+            errors.errorsMessages.push({
+                message: "bad field",
+                field: "minAgeRestriction"
             });
-            return;
+            errorFlag = true;
         }
         foundVideoUpdate.minAgeRestriction = minAgeRestrictionUpdate;
     }
     if(publicationDateUpdate){
         if(typeof publicationDateUpdate !== "string"){
-            res.status(400).send({
-                "errorsMessages":
-                    [{
-                        message: "bad field",
-                        field: "canBeDownloaded"
-                    }]
+            errors.errorsMessages.push({
+                message: "bad field",
+                field: "canBeDownloaded"
             });
-            return;
+            errorFlag = true;
         }
         foundVideoUpdate.publicationDate = publicationDateUpdate;
     }
@@ -192,15 +182,16 @@ app.put('/videos/:id', (req, res) => {
             foundVideoUpdate.availableResolutions = availableResolutionsReqUpdate;
         }
         else {
-            res.status(400).send({
-                "errorsMessages":
-                    [{
-                        message: "bad resolutions",
-                        field: "availableResolutions"
-                    }]
+            errors.errorsMessages.push({
+                message: "bad resolutions",
+                field: "availableResolutions"
             });
-            return;
+            errorFlag = true;
         }
+    }
+    if(errorFlag){
+        res.status(400).send(errors);
+        return;
     }
     res.sendStatus(204);
 })
