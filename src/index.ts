@@ -62,19 +62,16 @@ app.post('/videos', (req, res) => {
         availableResolutions: null
     }
     if(availableResolutionsReq){
-        let resolutionFlag = true;
-
-        for(const i of availableResolutionsReq)
-            resolutionFlag = resolutions.includes(i);
-        if(resolutionFlag)
-            newVideo.availableResolutions = availableResolutionsReq;
-        else {
-            errors.errorsMessages.push({
-                message: "bad resolutions",
-                field: "availableResolutions"
-            });
-            errorFlag = true;
-        }
+        for(let i: number = 0; i < availableResolutionsReq.length; i++)
+            if(!resolutions.includes(availableResolutionsReq[i])){
+                errors.errorsMessages.push({
+                    message: "bad resolutions",
+                    field: "availableResolutions"
+                });
+                errorFlag = true;
+                i = availableResolutionsReq.length;
+            }
+        newVideo.availableResolutions = availableResolutionsReq;
     }
     if(errorFlag){
         res.status(400).json(errors);
@@ -175,19 +172,16 @@ app.put('/videos/:id', (req, res) => {
         foundVideoUpdate.publicationDate = publicationDateUpdate;
     }
     if(availableResolutionsReqUpdate){
-        let resolutionFlagUpdate = true;
-        for(const i of availableResolutionsReqUpdate)
-            resolutionFlagUpdate = resolutions.includes(i);
-        if(resolutionFlagUpdate){
-            foundVideoUpdate.availableResolutions = availableResolutionsReqUpdate;
-        }
-        else {
-            errors.errorsMessages.push({
-                message: "bad resolutions",
-                field: "availableResolutions"
-            });
-            errorFlag = true;
-        }
+        for(let i: number = 0; i < availableResolutionsReqUpdate.length; i++)
+            if(!resolutions.includes(availableResolutionsReqUpdate[i])){
+                errors.errorsMessages.push({
+                    message: "bad resolutions",
+                    field: "availableResolutions"
+                });
+                errorFlag = true;
+                i = availableResolutionsReqUpdate.length;
+            }
+        foundVideoUpdate.availableResolutions = availableResolutionsReqUpdate;
     }
     if(errorFlag){
         res.status(400).json(errors);
