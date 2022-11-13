@@ -166,7 +166,7 @@ app.put('/videos/:id', (req, res) => {
         if(typeof publicationDateUpdate !== "string" || publicationDateUpdate !== publicationDateUpdateCheck){
             errors.errorsMessages.push({
                 message: "bad field",
-                field: "canBeDownloaded"
+                field: "publicationDate"
             });
             errorFlag = true;
         }
@@ -197,7 +197,7 @@ app.delete('/videos/:id', (req, res) => {
         res.sendStatus(404);
         return;
     }
-    db.videos = db.videos.splice(db.videos.indexOf(foundVideoDelete), 1);
+    db.videos = db.videos.filter(v => v.id !== Number(req.params.id));
     res.sendStatus(204);
 })
 
