@@ -61,11 +61,6 @@ app.post('/videos', (req, res) => {
 
         for(const i of availableResolutionsReq)
             resolutionFlag = resolutions.includes(i);
-
-        /*for(const resolutionReq of availableResolutionsReq)
-            for(const resolutionRigth of resolutions)
-                if(resolutionReq !== resolutionRigth)
-                    resolutionFlag = false;*/
         if(resolutionFlag)
             newVideo.availableResolutions = availableResolutionsReq;
         else {
@@ -145,7 +140,7 @@ app.put('/videos/:id', (req, res) => {
     }
     foundVideoUpdate.author = String(authorReqUpdate);
     if(canBeDownloadedUpdate){
-        if(canBeDownloadedUpdate !== "boolean"){
+        if(typeof canBeDownloadedUpdate !== "boolean"){
             res.status(400).send({
                 "errorsMessages":
                     [{
@@ -161,7 +156,7 @@ app.put('/videos/:id', (req, res) => {
         foundVideoUpdate.minAgeRestriction = minAgeRestrictionUpdate;
     }
     else if(minAgeRestrictionUpdate){
-        if(minAgeRestrictionUpdate !== "number" || minAgeRestrictionUpdate < 1 || minAgeRestrictionUpdate > 18){
+        if(typeof minAgeRestrictionUpdate !== "number" || minAgeRestrictionUpdate < 1 || minAgeRestrictionUpdate > 18){
             res.status(400).send({
                 "errorsMessages":
                     [{
@@ -174,7 +169,7 @@ app.put('/videos/:id', (req, res) => {
         foundVideoUpdate.minAgeRestriction = minAgeRestrictionUpdate;
     }
     if(publicationDateUpdate){
-        if(publicationDateUpdate !== "string"){
+        if(typeof publicationDateUpdate !== "string"){
             res.status(400).send({
                 "errorsMessages":
                     [{
@@ -188,14 +183,8 @@ app.put('/videos/:id', (req, res) => {
     }
     if(availableResolutionsReqUpdate){
         let resolutionFlagUpdate = true;
-
         for(const i of availableResolutionsReq)
             resolutionFlagUpdate = resolutions.includes(i);
-
-        /*for(const resolutionReq of availableResolutionsReqUpdate)
-            for(const resolutionRigth of resolutions)
-                if(resolutionReq !== resolutionRigth)
-                    resolutionFlagUpdate = false;*/
         if(resolutionFlagUpdate){
             foundVideoUpdate.availableResolutions = availableResolutionsReqUpdate;
         }
