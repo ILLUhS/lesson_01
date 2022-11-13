@@ -1,9 +1,9 @@
 // @ts-nocheck
-import express from 'express'
-export const app = express()
-const port = 5000
-const jsonBody = express.json()
-app.use(jsonBody)
+import express from 'express';
+export const app = express();
+const port = process.env.PORT || 5000;
+const jsonBody = express.json();
+app.use(jsonBody);
 
 type VideoType = {
     id: number;
@@ -18,7 +18,7 @@ type VideoType = {
 
 const db = {
     videos: Array<VideoType>
-}
+};
 //массив валидных разрешений
 const resolutions = [ 'P144', 'P240', 'P360', 'P480', 'P720', 'P1080', 'P1440', 'P2160' ];
 //POST
