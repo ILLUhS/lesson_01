@@ -26,7 +26,7 @@ app.post('/videos', (req, res) => {
     const titleReq = req.body.title;
     const authorReq = req.body.author;
     const availableResolutionsReq = req.body.availableResolutions;
-    if(!titleReq || typeof titleReq === "string" || titleReq.length > 40){
+    if(!titleReq || typeof titleReq !== "string" || titleReq.length > 40){
         res.status(400).send({
             "errorsMessages":
                 [{
@@ -36,7 +36,7 @@ app.post('/videos', (req, res) => {
         });
         return;
     }
-    if(!authorReq || typeof authorReq === "string" || authorReq.length > 20){
+    if(!authorReq || typeof authorReq !== "string" || authorReq.length > 20){
         res.status(400).send({
             "errorsMessages":
                 [{
@@ -118,7 +118,7 @@ app.put('/videos/:id', (req, res) => {
     const canBeDownloadedUpdate = req.body.canBeDownloaded;
     const minAgeRestrictionUpdate = req.body.minAgeRestriction;
     const publicationDateUpdate = req.body.publicationDate;
-    if(!titleReqUpdate || typeof titleReqUpdate === "string" || titleReqUpdate.length > 40){
+    if(!titleReqUpdate || typeof titleReqUpdate !== "string" || titleReqUpdate.length > 40){
         res.status(400).send({
             "errorsMessages":
                 [{
@@ -129,7 +129,7 @@ app.put('/videos/:id', (req, res) => {
         return;
     }
     foundVideoUpdate.title = String(titleReqUpdate);
-    if(!authorReqUpdate || typeof authorReqUpdate === "string" || authorReqUpdate.length > 20){
+    if(!authorReqUpdate || typeof authorReqUpdate !== "string" || authorReqUpdate.length > 20){
         res.status(400).send({
             "errorsMessages":
                 [{

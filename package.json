@@ -15,7 +15,7 @@
   "license": "MIT",
   "scripts": {
     "watch": "tsc -w",
-    "dev": "nodemon .\\dist\\index.js",
+    "dev": "nodemon .\\src\\index.ts",
     "test": "jest"
   },
   "devDependencies": {
