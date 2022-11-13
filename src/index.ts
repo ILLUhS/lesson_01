@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 import express from 'express';
 export const app = express();
 const port = process.env.PORT || 5000;
@@ -15,10 +15,13 @@ type VideoType = {
     publicationDate: string;
     availableResolutions: string[] | null;
 };
-
-const db = {
-    videos: Array<VideoType>
+type dbType = {
+    videos: VideoType[];
 };
+const db: dbType = {
+    videos: []
+};
+
 //массив валидных разрешений
 const resolutions = [ 'P144', 'P240', 'P360', 'P480', 'P720', 'P1080', 'P1440', 'P2160' ];
 //POST
@@ -52,7 +55,7 @@ app.post('/videos', (req, res) => {
         author: String(authorReq),
         canBeDownloaded: false,
         minAgeRestriction: null,
-        createdAt: new Date(),
+        createdAt: new Date().toISOString(),
         publicationDate: new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).toISOString(),
         availableResolutions: null
     }
@@ -183,7 +186,7 @@ app.put('/videos/:id', (req, res) => {
     }
     if(availableResolutionsReqUpdate){
         let resolutionFlagUpdate = true;
-        for(const i of availableResolutionsReq)
+        for(const i of availableResolutionsReqUpdate)
             resolutionFlagUpdate = resolutions.includes(i);
         if(resolutionFlagUpdate){
             foundVideoUpdate.availableResolutions = availableResolutionsReqUpdate;
